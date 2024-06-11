@@ -25,7 +25,9 @@ class PetResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Section::make([
-                Forms\Components\FileUpload::make('avatar'),
+                Forms\Components\FileUpload::make('avatar')
+                    ->image()
+                    ->imageEditor(),
                 Forms\Components\TextInput::make('name')
                     ->required(),
                 Forms\Components\DatePicker::make('date_of_birth')
@@ -35,8 +37,23 @@ class PetResource extends Resource
                     ->native(false)
                     ->options(PetType::class)
                     ->required(),
-                ])
-            ]);
+                Forms\Components\Select::make('owner_id')
+                    ->relationship('owner', 'name')
+                    ->native(false)
+                    ->searchable()
+                    ->preload()
+                    ->createOptionForm([
+                        Forms\Components\TextInput::make('name')
+                        ->required(),
+                        Forms\Components\TextInput::make('email')
+                        ->email()
+                        ->required(),
+                        Forms\Components\TextInput::make('phone')
+                        ->tel()
+                        ->required(),
+                    ])
+                    ]),
+                ]);
             
     }
 
