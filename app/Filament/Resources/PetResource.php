@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\OwnerResource\Pages;
-use App\Filament\Resources\OwnerResource\RelationManagers;
-use App\Models\Owner;
+use App\Filament\Resources\PetResource\Pages;
+use App\Filament\Resources\PetResource\RelationManagers;
+use App\Models\Pet;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -12,10 +12,11 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Enums\PetType;
 
-class OwnerResource extends Resource
+class PetResource extends Resource
 {
-    protected static ?string $model = Owner::class;
+    protected static ?string $model = Pet::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -25,29 +26,26 @@ class OwnerResource extends Resource
             ->schema([
                 Forms\Components\Section::make([
                 Forms\Components\TextInput::make('name')
-                ->required(),
-                Forms\Components\TextInput::make('email')
-                ->email()
-                ->required(),
-                Forms\Components\TextInput::make('phone')
-                ->tel()
-                ->required(),
-            ]),
+                    ->required(),
+                Forms\Components\DatePicker::make('date_of_birth')
+                    ->required()
+                    ->native(false),
+                Forms\Components\Select::make('type')
+                    ->native(false)
+                    ->options(PetType::class)
+                    ->required(),
+                Forms\Components\TextInput::make('avatar')
+                    
+                ])
             ]);
+            
     }
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
-                    ->sortable()
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('email')
-                    ->sortable()
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('phone')
-                    ->searchable(),
+                //
             ])
             ->filters([
                 //
@@ -72,9 +70,9 @@ class OwnerResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListOwners::route('/'),
-            'create' => Pages\CreateOwner::route('/create'),
-            'edit' => Pages\EditOwner::route('/{record}/edit'),
+            'index' => Pages\ListPets::route('/'),
+            'create' => Pages\CreatePet::route('/create'),
+            'edit' => Pages\EditPet::route('/{record}/edit'),
         ];
     }
 }
