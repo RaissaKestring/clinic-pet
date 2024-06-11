@@ -62,7 +62,11 @@ class PetResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\ImageColumn::make('avatar')
-                    ->circular()
+                    ->circular(),
+                Tables\Columns\TextColumn::make('name'),
+                Tables\Columns\TextColumn::make('type'),
+                Tables\Columns\TextColumn::make('date_of_birth')
+                    ->date('M / d / Y')
             ])
             ->filters([
                 //
