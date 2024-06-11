@@ -10,7 +10,13 @@ class Owner extends Model
 {
     use HasFactory;
 
+    // protected static $unguarded = true;
+
     public function pets():HasMany {
         return $this->hasMany(Pet::class);
+    }
+
+    public function owners():HasMany {
+        return $this->hasMany(Owner::class);
     }
 }
