@@ -16,4 +16,10 @@ class EditPet extends EditRecord
             Actions\DeleteAction::make(),
         ];
     }
+
+    protected function gerRedirectUrl(): ?string {
+        
+        return $this->getResource()::getUrl('index');
+
+    }
 }
