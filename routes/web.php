@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Routes\web;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,4 +16,26 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+use Laravel\Socialite\Facades\Socialite;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+
+Route::get('login/google', function () {
+    return Socialite::driver('google')->redirect();
+});
+
+Route::get('login/google/callback', function () {
+    $googleUser = Socialite::driver('google')->stateless()->user();
+
+    // Aqui você pode procurar o usuário no banco de dados e logá-lo
+    $user = User::firstOrCreate(
+        ['email' => $googleUser->getEmail()],
+        ['name' => $googleUser->getName(), 'google_id' => $googleUser->getId()]
+    );
+
+    Auth::login($user);
+
+    return redirect('/home');
 });
